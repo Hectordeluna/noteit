@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon index.js"
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix noteit",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +21,6 @@
   "devDependencies": {
     "concurrently": "^5.0.0",
     "nodemon": "^1.19.4"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
