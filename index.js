@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require("passport");
 
 require('./models/Note');
+require('./models/User');
 
 const app = express();
 
@@ -11,8 +13,13 @@ mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost:27017/node-reac
 
 app.use(bodyParser.json());
 
+// Passport middleware
+app.use(passport.initialize());// Passport config
+require("./config/passport")(passport);
+
 // IMPORT ROUTE
 require('./routes/noteRoute')(app);
+require('./routes/userRoute')(app);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
