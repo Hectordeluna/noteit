@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, Component } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
@@ -14,6 +14,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Sidebar from "./components/sidebar/Sidebar";
+import NoteEdit from "./components/note/NoteEdit";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -48,18 +49,8 @@ function App() {
 
   const getNotes = async () => {
     let res = await noteService.getAll();
-    console.log(res);
     setnotes(res);
   }
-
-  const renderProduct = note => {
-    return (
-      <li key={note._id} className="list__item note">
-        <h3 className="note__name">{note.name}</h3>
-        <p className="note__description">{note.description}</p>
-      </li>
-    );
-  };
 
   return (
     <Provider store={store}>
@@ -71,6 +62,8 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Switch>
               <PrivateRoute exact path="/dashboard" component={Sidebar} />
+              <PrivateRoute exact path="/note/:id" component={NoteEdit} />
+              <PrivateRoute exact path="/note" component={NoteEdit} />
           </Switch>
         </div>
       </Router>

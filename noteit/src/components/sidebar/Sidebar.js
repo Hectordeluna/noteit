@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import { Button, Container, Row, Col, Tab, Nav } from "react-bootstrap";
+import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import Mynotes from "./../mynotes/Mynotes";
 
 class Sidebar extends Component {
@@ -13,8 +13,7 @@ class Sidebar extends Component {
   };
   
   render() {
-    const { user } = this.props.auth;
-    
+        
     return (
         <Container style={{ boxShadow: "0px 0.2px 10px #9E9E9E", padding: "25px" }}>
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">

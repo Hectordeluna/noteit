@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Navbar as Nav } from 'react-bootstrap';
+import { Navbar as NavB, Nav } from 'react-bootstrap';
 
 class Navbar extends Component {
   render() {
     return (
-    <Nav bg="dark" variant="dark">
-        <Nav.Brand href="/">Noteit</Nav.Brand>
-    </Nav>
+    <NavB bg="dark" variant="dark">
+        <NavB.Brand href="/">Noteit</NavB.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="/dashboard">Home</Nav.Link>
+        </Nav>
+    </NavB>
     );
   }
 }export default Navbar;

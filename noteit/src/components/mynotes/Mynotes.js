@@ -1,14 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
+import { getNotes } from "../../actions/noteActions";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Note from "./../note/Note"
 
 class Mynotes extends Component {
 
+    componentDidMount() {
+        this.props.getNotes();
+    }
+
   render() {
-    
+    const { notes } = this.props.note;
+
     return (
       <Container>
         <Row>
@@ -16,13 +21,15 @@ class Mynotes extends Component {
             <h1>My Notes</h1>
           </Col>
           <Col md={2}>
-              <Button variant="dark" style={{ verticalAlign : "middle" }}>New Note</Button>
+              <Button href="/note" variant="dark" style={{ verticalAlign : "middle" }}>New Note</Button>
           </Col>
         </Row>
         <Row style={{ borderTop : "1px solid #dedede" }}>
-            <Col md={12}>
-                <Note title="My Note Test" date="20/20/2010"/>
-            </Col>
+            {notes.map(note => (
+                <Col key={note._id} md={12}>
+                    <Note name={note.name} date="20/20/20" id={note._id} description={note.description}/>
+                </Col>
+            ))}
         </Row>
       </Container>
     );
@@ -30,15 +37,15 @@ class Mynotes extends Component {
 }
 
 Mynotes.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  getNotes: PropTypes.func.isRequired,
+  note: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+    note: state.note
 });
 
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { getNotes }
 )(Mynotes);

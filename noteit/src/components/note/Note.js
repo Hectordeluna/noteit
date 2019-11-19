@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
-import { Button, Container, Row, Col, Card } from "react-bootstrap";
+import { deleteNote } from "../../actions/noteActions";
+import { Button, Row, Col, Card } from "react-bootstrap";
 
 class Note extends Component {
+
+
+    onDeleteClick = (id) => {
+        this.props.deleteNote(id);
+    }
 
   render() {
     
@@ -12,17 +17,21 @@ class Note extends Component {
     <Card style={{ margin : "10px" }}>
         <Card.Header>
             <Row>
-                <Col md={11}>
-                    {this.props.title} - {this.props.date}
+                <Col md={9}>
+                    {this.props.name} - {this.props.date}
                 </Col>
                 <Col md={1}>
-                    <Button variant="light" size="sm">Edit</Button>
+                    <Button href={"/note/" + this.props.id} variant="light" size="sm">Edit</Button>
+                </Col>
+                <Col md={1}>
+                    <Button variant="light" size="sm" onClick={this.onDeleteClick.bind(this,this.props.id)}>Delete</Button>
                 </Col>
             </Row>
         </Card.Header>
         <Card.Body>
             <Card.Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.            </Card.Text>
+            {this.props.description}
+            </Card.Text>
         </Card.Body>
     </Card>
     );
@@ -30,15 +39,15 @@ class Note extends Component {
 }
 
 Note.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  deleteNote: PropTypes.func.isRequired,
+  note: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  note: state.note
 });
 
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { deleteNote }
 )(Note);
