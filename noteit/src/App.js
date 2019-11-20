@@ -57,6 +57,7 @@ function App() {
       <Router>
         <div className="App">
           <Navbar/>
+          <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
@@ -64,6 +65,7 @@ function App() {
               <PrivateRoute exact path="/dashboard" component={Sidebar} />
               <PrivateRoute exact path="/note/:id" component={NoteEdit} />
               <PrivateRoute exact path="/note" component={NoteEdit} />
+          </Switch>
           </Switch>
         </div>
       </Router>

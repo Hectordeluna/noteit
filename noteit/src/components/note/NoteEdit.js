@@ -16,7 +16,8 @@ class NoteEdit extends Component {
             description : "",
             username : "",
             _id : "",
-            date : "",
+            date : Date.now(),
+            public: false,
         }
     }
 
@@ -31,7 +32,8 @@ class NoteEdit extends Component {
         if (this.props !== prevProps) {
             this.setState({
                 name : prevProps.note.name,
-                description : prevProps.description
+                description : prevProps.description,
+                public: prevProps.public
             });
         }
  
@@ -40,11 +42,16 @@ class NoteEdit extends Component {
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
     };
+
+    onSwitch = e => {
+        this.setState(prevState => ({ public: !prevState.public })); 
+    }
       
     onSave = e => {
         e.preventDefault();
         
         let { id } = this.props.match.params;
+
 
         const noteData = {
             name: this.state.name,
@@ -56,6 +63,7 @@ class NoteEdit extends Component {
         if (!id) {
             const { user } = this.props.auth;
             noteData.username = user.id;
+            noteData.canEdit = [user.id];
             this.props.createNote(noteData,this.props.history); 
         }  else {
             this.props.editNote(id,noteData);
@@ -70,11 +78,14 @@ class NoteEdit extends Component {
             <Form>
             <Form.Group>
             <Row style={{ height : "10vh", display: "flex", alignItems: "center" }}>
+                <Col md={1}>
+                    <Button onClick={this.onSave.bind(this)}>Save</Button>
+                </Col>
                 <Col md={10}>
                         <Form.Control id="name" onChange={this.onChange} defaultValue={notes.name} style={{ border: "none", fontWeight: "bold" }} type="title" placeholder="Title..."/>
                 </Col>
-                <Col style={{ display: "flex", alignItems: "center" }} md={2}>
-                    <Button onClick={this.onSave.bind(this)}>Save</Button>
+                <Col md={1}>
+                    <Form.Check id="public" type="switch" onChange={this.onSwitch} label="Public" defaultChecked={notes.public}/>
                 </Col>
             </Row>
             <Row style={{ height : "100vh" }}>

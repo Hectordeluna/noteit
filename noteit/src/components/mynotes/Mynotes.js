@@ -27,7 +27,7 @@ class Mynotes extends Component {
         <Row style={{ borderTop : "1px solid #dedede" }}>
             {notes.map(note => (
                 <Col key={note._id} md={12}>
-                    <Note name={note.name} date="20/20/20" id={note._id} description={note.description}/>
+                    <Note name={note.name} date={note.date.split('T')[0]} id={note._id} description={note.description}/>
                 </Col>
             ))}
         </Row>
