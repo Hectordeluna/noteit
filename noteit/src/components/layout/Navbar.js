@@ -13,7 +13,7 @@ class Navbar extends Component {
         <Nav className="mr-auto">
           <Nav.Link href="/dashboard">Home</Nav.Link>
         </Nav>
-        <Nav pullRight>
+        <Nav>
           <NavDropdown drop="left" title={(<FaUserAlt/>)} id="dropdown">
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={this.props.logoutUser}>Log out</NavDropdown.Item>

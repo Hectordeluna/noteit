@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (app) => {
 
-  app.use('/api/note', function(req, res, next) {
+  app.use('/api/note/', function(req, res, next) {
     var token = req.get("Authorization");
     if (!token) next({ auth: false, message: 'No token provided.' });
     
@@ -21,7 +21,11 @@ module.exports = (app) => {
 
   app.get(`/api/note`, (req, res) => {
     const userID = req.user.id;
-    User.findById(userID).populate('notes').exec((err, notes) => res.json(notes.notes));
+    User.findById(userID).
+    populate(
+      {path: 'notes', 
+      populate: {path: "comments"}
+      }).exec((err, notes) => res.json(notes.notes));
     // Note.find()
     //   .then(notes => res.json(notes));
   });

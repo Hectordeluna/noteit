@@ -3,8 +3,7 @@ const {Schema} = mongoose;
 
 const commentSchema = new Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
-    comment: String,
-    likes: Number
+    comment: String
 })
 
 mongoose.model('comments', commentSchema);
