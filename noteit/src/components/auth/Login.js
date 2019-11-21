@@ -70,12 +70,12 @@ class Login extends Component {
             <Form noValidate onSubmit={this.onSubmit}>
               <Col>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={this.onChange}
+                    <Form.Label>Email or Username</Form.Label>
+                    <Form.Control type="text" placeholder="Enter email or Username" onChange={this.onChange}
                     value={this.state.email}
                     error={errors.email}
                     id="email"
-                    type="email"
+                    type="text"
                     className={classnames("", {
                         invalid: errors.email || errors.emailnotfound
                     })}/>

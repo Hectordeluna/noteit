@@ -11,6 +11,7 @@ class Register extends Component {
     super();
     this.state = {
       name: "",
+      username: "",
       email: "",
       password: "",
       password2: "",
@@ -24,7 +25,7 @@ class Register extends Component {
       this.props.history.push("/dashboard");
     }
   }
-  
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({
@@ -32,33 +33,37 @@ class Register extends Component {
       });
     }
   }
-  
+
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
-  
+
   onSubmit = e => {
     e.preventDefault();
-    
     const newUser = {
       name: this.state.name,
+      username: this.state.username,
       email: this.state.email,
       password: this.state.password,
       password2: this.state.password2
     };
-    
-    this.props.registerUser(newUser, this.props.history); 
+
+    this.props.registerUser(newUser, this.props.history);
   };
-  
+
   render() {
-    const { errors } = this.state;return (
+    const { errors } = this.state;
+    return (
       <Container>
-        <Row style={{ marginTop: "4rem" }} className="justify-content-md-center">
+        <Row
+          style={{ marginTop: "4rem" }}
+          className="justify-content-md-center"
+        >
           <Col xs lg={6}>
             <Col>
-                <Button href="/" variant="light">
+              <Button href="/" variant="light">
                 Back to home
-                </Button>
+              </Button>
             </Col>
             <Col md={12} style={{ paddingLeft: "11.250px" }}>
               <h4>
@@ -70,9 +75,10 @@ class Register extends Component {
             </Col>
             <Form noValidate onSubmit={this.onSubmit}>
               <Col>
-                <Form.Group controlId="formPassword">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control type="name" placeholder="Enter password" 
+                <Form.Group>
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    placeholder="Enter your full name..."
                     onChange={this.onChange}
                     value={this.state.name}
                     error={errors.name}
@@ -80,14 +86,33 @@ class Register extends Component {
                     type="text"
                     className={classnames("", {
                       invalid: errors.name
-                    })}/>
+                    })}
+                  />
                 </Form.Group>
                 <span className="red-text">{errors.name}</span>
               </Col>
               <Col>
-                <Form.Group controlId="formPassword">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Enter password" 
+                <Form.Group>
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    placeholder="Enter a username..."
+                    onChange={this.onChange}
+                    value={this.state.username}
+                    error={errors.username}
+                    id="username"
+                    type="text"
+                    className={classnames("", {
+                      invalid: errors.username
+                    })}
+                  />
+                </Form.Group>
+                <span className="red-text">{errors.username}</span>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    placeholder="Enter your email..."
                     onChange={this.onChange}
                     value={this.state.email}
                     error={errors.email}
@@ -95,36 +120,42 @@ class Register extends Component {
                     type="email"
                     className={classnames("", {
                       invalid: errors.email
-                    })}/>
+                    })}
+                  />
                 </Form.Group>
                 <span className="red-text">{errors.email}</span>
               </Col>
               <Col>
-                <Form.Group controlId="formPassword">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter password" 
+                <Form.Group>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    placeholder="Enter your password..."
                     onChange={this.onChange}
                     value={this.state.password}
                     error={errors.password}
                     id="password"
                     type="password"
                     className={classnames("", {
-                    invalid: errors.password
-                    })}/>
+                      invalid: errors.password
+                    })}
+                  />
                 </Form.Group>
                 <span className="red-text">{errors.password}</span>
               </Col>
               <Col>
-                <Form.Group controlId="formPassword">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter password"  onChange={this.onChange}
-                  value={this.state.password2}
-                  error={errors.password2}
-                  id="password2"
-                  type="password"
-                  className={classnames("", {
-                    invalid: errors.password2
-                  })}/>
+                <Form.Group>
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    placeholder="Enter your password again..."
+                    onChange={this.onChange}
+                    value={this.state.password2}
+                    error={errors.password2}
+                    id="password2"
+                    type="password"
+                    className={classnames("", {
+                      invalid: errors.password2
+                    })}
+                  />
                 </Form.Group>
                 <span className="red-text">{errors.password2}</span>
               </Col>
@@ -138,7 +169,8 @@ class Register extends Component {
                   }}
                   type="submit"
                   className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                 variant="dark">
+                  variant="dark"
+                >
                   Sign up
                 </Button>
               </Col>
@@ -161,7 +193,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(withRouter(Register));
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));

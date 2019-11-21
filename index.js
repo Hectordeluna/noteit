@@ -9,7 +9,7 @@ require('./models/User');
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`);
+mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost:27017/NOTEIT_DB`);
 
 app.use(bodyParser.json());
 
