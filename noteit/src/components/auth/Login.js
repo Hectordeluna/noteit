@@ -75,7 +75,7 @@ class Login extends Component {
                     value={this.state.email}
                     error={errors.email}
                     id="email"
-                    type="email"
+                    type="text"
                     className={classnames("", {
                         invalid: errors.email || errors.emailnotfound
                     })}/>
