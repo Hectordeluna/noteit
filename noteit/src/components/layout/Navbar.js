@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Navbar as NavB, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar as NavB, Nav, NavDropdown, Row, Col, Form, FormControl, InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { FaUserAlt } from 'react-icons/fa';
 import { logoutUser } from "../../actions/authActions";
 
@@ -13,12 +13,11 @@ class Navbar extends Component {
         <Nav className="mr-auto">
           <Nav.Link href="/dashboard">Home</Nav.Link>
         </Nav>
-        <Nav>
+          <Nav>
           <NavDropdown drop="left" title={(<FaUserAlt/>)} id="dropdown">
-            <NavDropdown.Divider />
             <NavDropdown.Item onClick={this.props.logoutUser}>Log out</NavDropdown.Item>
           </NavDropdown>
-        </Nav>
+          </Nav>
     </NavB>
     );
   }

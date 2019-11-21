@@ -24,10 +24,9 @@ module.exports = (app) => {
     User.findById(userID).
     populate(
       {path: 'notes', 
-      populate: {path: "comments"}
+      populate: {path: "comments", populate: "user"},
+      options: {sort: {date: -1}}
       }).exec((err, notes) => res.json(notes.notes));
-    // Note.find()
-    //   .then(notes => res.json(notes));
   });
 
   app.get(`/api/note/:id`, (req, res) => {

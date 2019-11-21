@@ -13,7 +13,7 @@ class Note extends Component {
       super(props);
 
       this.state = {
-        commentsNote: this.props.commentsNote,
+        commentsNote: this.props.commentsNote || [],
       }
     }
 
@@ -47,6 +47,46 @@ class Note extends Component {
       this.props.createComment(this.props.id,commentData);
   };
 
+  displayComments() {
+
+    if (this.props.commentsDisable) {
+      return null;
+    }
+    console.log(this.state.commentsNote);
+    return (
+      <div>
+      <Row>
+          <Col className="ml-auto" md={11}>
+            <ListGroup variant="flush">
+              {this.state.commentsNote.map(comment => (
+                <ListGroup.Item>
+                  <Comment username={"@"+comment.user.username} comment={comment.comment}/>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+            
+          </Col>
+        </Row>
+        <Row>
+          <Col className="ml-auto" md={11}>
+            <Form onSubmit={this.onSave.bind(this)}>
+              <Form.Group>
+              <Row>
+              <Col md={10}>
+                        <Form.Control id="comment" onChange={this.onChange} style={{ border: "none", borderBottom : "1px solid #dedede",fontWeight: "light" }} type="title" placeholder="Comment..."/>
+                  </Col>
+                  <Col md={1}>
+                      <Button onClick={this.onSave.bind(this)} variant="light">Add</Button>
+                  </Col>
+              </Row>
+              </Form.Group>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+      );
+  }
+
   render() {
 
     return (
@@ -78,33 +118,7 @@ class Note extends Component {
             ))}
           </Card.Footer>
       </Card>
-      <Row>
-        <Col className="ml-auto" md={11}>
-          <ListGroup variant="flush">
-            {this.state.commentsNote.map(comment => (
-              <ListGroup.Item>
-                <Comment username={comment.user} comment={comment.comment}/>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col className="ml-auto" md={11}>
-          <Form onSubmit={this.onSave.bind(this)}>
-            <Form.Group>
-            <Row>
-            <Col md={10}>
-                      <Form.Control id="comment" onChange={this.onChange} style={{ border: "none", borderBottom : "1px solid #dedede",fontWeight: "light" }} type="title" placeholder="Comment..."/>
-                </Col>
-                <Col md={1}>
-                    <Button onClick={this.onSave.bind(this)} variant="light">Add</Button>
-                </Col>
-            </Row>
-            </Form.Group>
-          </Form>
-        </Col>
-      </Row>
+      {this.displayComments()}
     </div>
     );
   }

@@ -39,6 +39,7 @@ app.use(passport.session());
 require('./routes/noteRoute')(app);
 require('./routes/userRoute')(app);
 require('./routes/commentRoute')(app);
+require('./routes/searchRoute')(app);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
