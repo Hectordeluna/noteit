@@ -8,7 +8,8 @@ const noteSchema = new Schema({
     username: String,
     public: Boolean,
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comments'}],
-    canEdit : [{type: mongoose.Schema.Types.ObjectId, ref: 'users'}]
+    canEdit : [{type: mongoose.Schema.Types.ObjectId, ref: 'users'}],
+    tags: [String]
 })
 
 mongoose.model('notes', noteSchema);

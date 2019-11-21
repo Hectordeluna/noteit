@@ -25,11 +25,13 @@ class Mynotes extends Component {
           </Col>
         </Row>
         <Row style={{ borderTop : "1px solid #dedede" }}>
-            {notes.map(note => (
+            {notes.length > 0 ? notes.map(note => (
+              
                 <Col key={note._id} md={12}>
-                    <Note name={note.name} date={note.date.split('T')[0]} id={note._id} description={note.description} commentsNote={note.comments}/>
+                    <Note name={note.name} date={note.date.toString().split('T')[0]} id={note._id} description={note.description} commentsNote={note.comments} tags={note.tags}/>
                 </Col>
-            ))}
+              
+            )) : (<p></p>)}
         </Row>
       </Container>
     );

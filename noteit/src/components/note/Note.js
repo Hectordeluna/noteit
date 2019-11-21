@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { deleteNote } from "../../actions/noteActions";
 import { logoutUser } from "../../actions/authActions";
 import { createComment } from "../../actions/commentActions";
-import { Button, Row, Form, Col, Card, ListGroup } from "react-bootstrap";
+import { Button, Row, Form, Col, Card, ListGroup, Badge } from "react-bootstrap";
 import Comment from "./Comment";
 
 class Note extends Component {
@@ -13,7 +13,7 @@ class Note extends Component {
       super(props);
 
       this.state = {
-        commentsNote: this.props.commentsNote
+        commentsNote: this.props.commentsNote,
       }
     }
 
@@ -70,6 +70,13 @@ class Note extends Component {
               {this.props.description}
               </Card.Text>
           </Card.Body>
+          <Card.Footer>
+          {this.props.tags.map(tag => (
+                    <Badge variant="secondary" style={{ marginRight: "10px" }}>
+                        {tag}
+                    </Badge>
+            ))}
+          </Card.Footer>
       </Card>
       <Row>
         <Col className="ml-auto" md={11}>
