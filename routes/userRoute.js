@@ -84,6 +84,7 @@ module.exports = (app) => {
             // Create JWT Payload
             const payload = {
                 id: user.id,
+                username: user.username,
                 name: user.name
             };
             
@@ -137,7 +138,7 @@ module.exports = (app) => {
       const userID = req.user.id;
       const {user2} = req.params;
       User.findById({user2}).then(user => {
-        
+
         user.requests.push(userID);
         user.save();
         return res.status(200).json({success: true});
@@ -148,11 +149,11 @@ module.exports = (app) => {
     });
 
     // remove friend request from user
-    app.post('api/users/deny-request/:requestID', (req, res) => {
+    app.post('api/users/deny-request/:requestID', async (req, res) => {
       const userID = req.user.id;
       const {requestID} = req.params;
       User.findById({userID}).then(user => {
-        users.requests = user.requests.filter(id => {id == requestID});
+        user.requests = user.requests.filter(id => {id == requestID});
         user.save();
         return res.status(200).json({success: true});
       })
@@ -165,9 +166,18 @@ module.exports = (app) => {
     app.post('/api/users/accept-request/:requestID', async (res, req) => {
       const userID = req.user.id;
       const {requestID} = req.params;
+
+      User.findById({requestID}).then(user2 =>{
+        user2.friends.push(userID);
+        user2.save();
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+
       User.findById({userID}).then(user => {
         user.friends.push(requestID);
-        users.requests = user.requests.filter(id => {id == requestID});
+        user.requests = user.requests.filter(id => {id == requestID});
         user.save();
         return res.status(200).json({success: true});
       })

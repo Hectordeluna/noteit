@@ -40,9 +40,11 @@ class Note extends Component {
 
       const commentData = {
           user: user.id,
+          username: user.username,
           comment: this.state.comment,
           likes: 0
       };
+      
       this.setState({comment: ""});
       this.props.createComment(this.props.id,commentData);
   };
@@ -76,7 +78,7 @@ class Note extends Component {
           <ListGroup variant="flush">
             {this.state.commentsNote.map(comment => (
               <ListGroup.Item>
-                <Comment username={comment.user} comment={comment.comment}/>
+                <Comment username={comment.username} comment={comment.comment}/>
               </ListGroup.Item>
             ))}
           </ListGroup>
@@ -88,7 +90,9 @@ class Note extends Component {
             <Form.Group>
             <Row>
             <Col md={10}>
-                      <Form.Control id="comment" onChange={this.onChange} style={{ border: "none", borderBottom : "1px solid #dedede",fontWeight: "light" }} type="title" placeholder="Comment..."/>
+                      <Form.Control id="comment" value={this.state.comment} onChange={this.onChange}
+                      style={{ border: "none", borderBottom : "1px solid #dedede",fontWeight: "light" }}
+                      type="title" placeholder="Comment..."/>
                 </Col>
                 <Col md={1}>
                     <Button onClick={this.onSave.bind(this)} variant="light">Add</Button>
