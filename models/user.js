@@ -22,7 +22,9 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  notes: [{type: mongoose.Schema.Types.ObjectId, ref: 'notes'}]
+  notes: [{type: mongoose.Schema.Types.ObjectId, ref: 'notes'}],
+  requests: [{type: mongoose.Schema.Types.ObjectId, ref: 'users'}],
+  friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'users'}]
 });
 
 const User = mongoose.model('users', UserSchema);

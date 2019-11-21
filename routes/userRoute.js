@@ -49,8 +49,7 @@ module.exports = (app) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
                         if (err) throw err;
                         newUser.password = hash;
-                        newUser
-                        .save()
+                        newUser.save()
                         .then(user => res.json(user))
                         .catch(err => console.log(err));
                     });
@@ -110,6 +109,71 @@ module.exports = (app) => {
             }
         });
         });
+    });
+
+    // list all friend requests form user
+    app.get('/api/users/requests', async (req, res) =>{
+      const userID = req.user.id;
+      User.findById({userID}).then(user => {
+        return res.status(200).json(user.requests);
+      }).catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    //list user's friends
+    app.get('/api/users/friends', async (req, res) =>{
+      const userID = req.user.id;
+      User.findById({userID}).then(user => {
+        return res.status(200).json(user.friends);
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // send a friend request to another user
+    app.post('/api/users/send-request/:user2', async (req, res) => {
+      const userID = req.user.id;
+      const {user2} = req.params;
+      User.findById({user2}).then(user => {
+        
+        user.requests.push(userID);
+        user.save();
+        return res.status(200).json({success: true});
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // remove friend request from user
+    app.post('api/users/deny-request/:requestID', (req, res) => {
+      const userID = req.user.id;
+      const {requestID} = req.params;
+      User.findById({userID}).then(user => {
+        users.requests = user.requests.filter(id => {id == requestID});
+        user.save();
+        return res.status(200).json({success: true});
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // remove friend request and add to friends list
+    app.post('/api/users/accept-request/:requestID', async (res, req) => {
+      const userID = req.user.id;
+      const {requestID} = req.params;
+      User.findById({userID}).then(user => {
+        user.friends.push(requestID);
+        users.requests = user.requests.filter(id => {id == requestID});
+        user.save();
+        return res.status(200).json({success: true});
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
     });
 
 }
