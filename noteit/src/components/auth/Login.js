@@ -69,9 +69,9 @@ class Login extends Component {
             </Col>
             <Form noValidate onSubmit={this.onSubmit}>
               <Col>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email or Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter email or Username" onChange={this.onChange}
+                <Form.Group>
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" onChange={this.onChange}
                     value={this.state.email}
                     error={errors.email}
                     id="email"
@@ -86,7 +86,7 @@ class Login extends Component {
                 </span>
               </Col>
               <Col>
-                <Form.Group controlId="formPassword">
+                <Form.Group>
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Enter password" onChange={this.onChange}
                     value={this.state.password}

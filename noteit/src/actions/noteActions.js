@@ -11,7 +11,7 @@ import {
 
 export const getNotes = () => dispatch => {
   dispatch(setNotesLoading());
-  axios.get('/api/note').then(res => 
+  axios.get('/api/note',{withCredentials: true}).then(res => 
       dispatch({
         type: GET_NOTES,
         payload: res.data

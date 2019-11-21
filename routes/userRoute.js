@@ -4,14 +4,16 @@ const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
+const passport = require("passport");
 // Load input validation
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 // Load User model
 const User = mongoose.model('users');
-
+const { forwardAuthenticated } = require('../config/auth');
 
 module.exports = (app) => {
+
     // @route POST api/users/register
     // @desc Register user
     // @access Public
@@ -96,10 +98,11 @@ module.exports = (app) => {
                 (err, token) => {
                 res.json({
                     success: true,
-                    token: "Bearer " + token
+                    token: token
                 });
                 }
             );
+            
             } else {
             return res
                 .status(400)
