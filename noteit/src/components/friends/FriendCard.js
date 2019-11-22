@@ -21,6 +21,7 @@ class FriendCard extends Component {
     if (this.state.hide) {
       return null;
     }
+
     return (
       <Card style={{ margin: "20px" }}>
         <Card.Body>

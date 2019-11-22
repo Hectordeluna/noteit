@@ -112,24 +112,22 @@ module.exports = (app) => {
         });
     });
 
-
-    app.use('/api/users/', function(req, res, next) {
-      var token = req.get("Authorization");
-      if (!token) next({ auth: false, message: 'No token provided.' });
-      
-      jwt.verify(token, keys.secretOrKey, function(err, decoded) {
-        if (err) next(err);
-        
-        req.user = decoded;
-        next();
-      });
-    });
-
     // list all friend requests form user
     app.get('/api/users/requests', async (req, res) =>{
       const userID = req.user.id;
       User.findById({_id : userID}).populate('requests').then(user => {
         return res.status(200).json(user.requests);
+      }).catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // get all user information
+    app.get('/api/users/:userID', async (req, res) => {
+      const {userID} = req.params;
+      User.findById(userID).then(user => {
+        console.log(user);
+        return res.status(200).json(user);
       }).catch(function(err) {
         return res.json(err);
       });

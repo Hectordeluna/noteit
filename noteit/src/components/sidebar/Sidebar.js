@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import { Container, Row, Col, Tab, Nav, Button, FormControl, Form } from "react-bootstrap";
 import Mynotes from "./../mynotes/Mynotes";
+import Myprofile from "./../myprofile/Myprofile";
 import Search from "./Search";
 import { Redirect } from "react-router-dom";
 import searchService from './../../services/searchService';
@@ -20,6 +21,7 @@ class Sidebar extends Component {
       results: {notes: []},
       friendsNotes: [],
       friendsGetRequest: [],
+      friendsRequests: [],
       resultNotes: [],
     }
   }
@@ -72,6 +74,9 @@ class Sidebar extends Component {
                         <Nav.Item>
                         <Nav.Link eventKey="third" onClick={this.onClick.bind(this)}>Friend Requests</Nav.Link>
                         </Nav.Item>
+                        <Nav.Item>
+                        <Nav.Link eventKey="fourth" onClick={this.onClick.bind(this)}>My Profile</Nav.Link>
+                        </Nav.Item>
                     </Nav>
                     <div style={{ borderBottom: "1px solid #dedede", marginBottom: "15px" }}></div>
                     <Form onSubmit={this.searchAPI.bind(this)}>
@@ -91,6 +96,9 @@ class Sidebar extends Component {
                         </Tab.Pane>
                         <Tab.Pane eventKey="third" onEnter={this.friendsGetRequest.bind(this)}>
                             <FriendRequestLists friendsRequests={this.state.friendsRequests} title="Friend Requests"/>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="fourth">
+                            <Myprofile />
                         </Tab.Pane>
                     </Tab.Content>
                 </Col>
