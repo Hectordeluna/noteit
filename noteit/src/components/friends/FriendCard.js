@@ -4,11 +4,23 @@ import userService from "./../../services/userService";
 
 class FriendCard extends Component {
 
+  constructor(props) {
+    super();
+
+    this.state = {
+        hide: false
+    }
+  }
+
   addFriend = () => {
+    this.setState({hide:true});
     userService.sendRequest(this.props.id);
   }
 
   render() {
+    if (this.state.hide) {
+      return null;
+    }
     return (
       <Card style={{ margin: "20px" }}>
         <Card.Body>

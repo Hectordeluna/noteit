@@ -18,10 +18,14 @@ class Navbar extends Component {
   profile () {
     const {user} = this.props.auth;
 
+    if (!user.username) {
+      return null;
+    }
+
       return (
         <Nav>
         <NavDropdown drop="left" title={(<FaUserAlt/>)} id="dropdown">
-          <NavDropdown.Item>{this.state.currentUser}</NavDropdown.Item>
+          <NavDropdown.Item>{user.username}</NavDropdown.Item>
           <NavDropdown.Divider />
           <NavDropdown.Item onClick={this.props.logoutUser}>Log out</NavDropdown.Item>
         </NavDropdown>

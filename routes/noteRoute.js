@@ -46,7 +46,7 @@ module.exports = (app) => {
     const userID = req.user.id;
 
     User.findById({_id : userID}).then(user => {
-      Note.find({ username : {$in : user.friends}, public : "true"}).populate([{ path: 'username', select: 'username' },{ path: 'comments', populate : {path: 'user', select: 'username' }}]).then(notes => {
+      Note.find({ username : {$in : user.friends}, public : true}).sort([["date",-1]]).populate([{ path: 'username', select: 'username' },{ path: 'comments', populate : {path: 'user', select: 'username' }}]).then(notes => {
         return res.json(notes);
       })
     });
