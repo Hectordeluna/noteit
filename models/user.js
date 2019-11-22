@@ -8,6 +8,7 @@ const UserSchema = new Schema({
   },
   username: {
     type: String,
+    text: true,
     required: true
   },
   email: {
@@ -22,8 +23,12 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  notes: [{type: mongoose.Schema.Types.ObjectId, ref: 'notes'}]
+  notes: [{type: mongoose.Schema.Types.ObjectId, ref: 'notes'}],
+  requests: [{type: mongoose.Schema.Types.ObjectId, ref: 'users'}],
+  friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'users'}]
 });
+
+UserSchema.index({username : 'text'});
 
 const User = mongoose.model('users', UserSchema);
 

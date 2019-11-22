@@ -7,7 +7,9 @@ import Mynotes from "./../mynotes/Mynotes";
 import Search from "./Search";
 import { Redirect } from "react-router-dom";
 import searchService from './../../services/searchService';
-
+import noteService from './../../services/noteService';
+import NotesList from "./../mynotes/NotesList";
+import FriendRequestLists from "./../friends/FriendRequestLists";
 
 class Sidebar extends Component {
 
@@ -15,7 +17,10 @@ class Sidebar extends Component {
     super();
     this.state = {
       searching : false,
-      results: {notes: []}
+      results: {notes: []},
+      friendsNotes: [],
+      friendsGetRequest: [],
+      resultNotes: [],
     }
   }
 
@@ -23,12 +28,6 @@ class Sidebar extends Component {
     e.preventDefault();
     this.props.logoutUser();
   };
-
-  onSearch = e => {
-    e.preventDefault();
-    this.setState({currAct: "search"});
-    this.searchAPI(e);
-  }
 
   onClick = e => {
     this.setState({currAct: e.target.eventKey});
@@ -44,11 +43,18 @@ class Sidebar extends Component {
 
   searchAPI = async e => {
     e.preventDefault();
-  this.setState({currAct: "search"});
-   this.setState({ results : await searchService.getAll(this.state.searchValue)});
-   console.log(this.state.results);
+    this.setState({currAct: "search"});
+    this.setState({ results : await searchService.getAll(this.state.searchValue)});
+  }
+
+  friendsNotes = async e => {
+    this.setState({ resultNotes : await noteService.getFriendsNotes()});
   }
   
+  friendsGetRequest = async e => {
+    this.setState({ friendsRequests : await searchService.getRequests()});
+  }
+
   render() {
         
     return (
@@ -61,12 +67,15 @@ class Sidebar extends Component {
                         <Nav.Link eventKey="first" onClick={this.onClick.bind(this)}>My Notes</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                        <Nav.Link eventKey="second" onClick={this.onClick.bind(this)}>Tab 2</Nav.Link>
+                        <Nav.Link eventKey="second" onClick={this.onClick.bind(this)}>Friends</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                        <Nav.Link eventKey="third" onClick={this.onClick.bind(this)}>Friend Requests</Nav.Link>
                         </Nav.Item>
                     </Nav>
                     <div style={{ borderBottom: "1px solid #dedede", marginBottom: "15px" }}></div>
                     <Form onSubmit={this.searchAPI.bind(this)}>
-                    <FormControl type="text" id="searchValue" placeholder="Search" onChange={this.onChange.bind(this)}/>
+                    <FormControl type="text" id="searchValue" placeholder="Search..." onChange={this.onChange.bind(this)}/>
                     </Form>
                 </Col>
                 <Col>
@@ -74,11 +83,14 @@ class Sidebar extends Component {
                         <Tab.Pane eventKey="first">
                             <Mynotes />
                         </Tab.Pane>
-                        <Tab.Pane eventKey="second">
-                            Hola
+                        <Tab.Pane eventKey="second" onEnter={this.friendsNotes.bind(this)}>
+                            <NotesList notes={this.state.resultNotes} title="Friends"/>
                         </Tab.Pane>
                         <Tab.Pane eventKey="search">
                             <Search results={this.state.results.notes} search={this.state.searchValue} onChange={this.onSearchChange.bind(this)} onSubmit={this.searchAPI.bind(this)}/>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="third" onEnter={this.friendsGetRequest.bind(this)}>
+                            <FriendRequestLists friendsRequests={this.state.friendsRequests} title="Friend Requests"/>
                         </Tab.Pane>
                     </Tab.Content>
                 </Col>

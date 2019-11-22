@@ -25,7 +25,9 @@ module.exports = (app) => {
         note.comments.push(newComment);
         note.save();
       });
-      return res.status(201).json(newComment);
+      newComment.populate('user', function(err) {
+        return res.status(201).json(newComment);
+      });
     }).catch(function(err) {
       return res.json(err);
     });

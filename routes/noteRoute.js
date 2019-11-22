@@ -29,6 +29,31 @@ module.exports = (app) => {
       }).exec((err, notes) => res.json(notes.notes));
   });
 
+  app.use('/api/friends/', function(req, res, next) {
+    var token = req.get("Authorization");
+    if (!token) next({ auth: false, message: 'No token provided.' });
+    
+    jwt.verify(token, keys.secretOrKey, function(err, decoded) {
+      if (err) next(err);
+      
+      req.user = decoded;
+      next();
+    });
+  });
+
+
+  app.get(`/api/friends/notes`, (req, res) => {
+    const userID = req.user.id;
+
+    User.findById({_id : userID}).then(user => {
+      Note.find({ username : {$in : user.friends}, public : "true"}).populate([{ path: 'username', select: 'username' },{ path: 'comments', populate : {path: 'user', select: 'username' }}]).then(notes => {
+        return res.json(notes);
+      })
+    });
+
+  });
+
+
   app.get(`/api/note/:id`, (req, res) => {
     const {id} = req.params;
     Note.findById(id)

@@ -22,7 +22,6 @@ class Note extends Component {
     }
 
     componentDidUpdate(prevProps) {
-      console.log(prevProps.comments.comment);
       if (this.props.comments.comment !== prevProps.comments.comment) {
         if (this.props.comments.comment.id === this.props.id)
           this.setState(prev => ({ commentsNote: [...prev.commentsNote, this.props.comments.comment.data] }))
@@ -40,9 +39,11 @@ class Note extends Component {
 
       const commentData = {
           user: user.id,
+          username: user.username,
           comment: this.state.comment,
           likes: 0
       };
+      
       this.setState({comment: ""});
       this.props.createComment(this.props.id,commentData);
   };
@@ -52,14 +53,14 @@ class Note extends Component {
     if (this.props.commentsDisable) {
       return null;
     }
-    console.log(this.state.commentsNote);
+
     return (
       <div>
       <Row>
           <Col className="ml-auto" md={11}>
             <ListGroup variant="flush">
               {this.state.commentsNote.map(comment => (
-                <ListGroup.Item>
+                <ListGroup.Item key={comment._id}>
                   <Comment username={"@"+comment.user.username} comment={comment.comment}/>
                 </ListGroup.Item>
               ))}
@@ -87,6 +88,30 @@ class Note extends Component {
       );
   }
 
+  getButtons () {
+    const { user } = this.props.auth;
+    if (this.props.canEdit.includes(user.id)) {
+      return (
+        <>
+        <Col md={1}>
+        <Button href={"/note/" + this.props.id} variant="light" size="sm">Edit</Button>
+        </Col>
+        <Col md={1}>
+        <Button variant="light" size="sm" onClick={this.onDeleteClick.bind(this,this.props.id)}>Delete</Button>
+        </Col>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Col md={2}>
+          <Button href={"/note/" + this.props.id} variant="light" size="sm">View</Button>
+        </Col>
+      </>
+    );
+  }
+
   render() {
 
     return (
@@ -95,14 +120,9 @@ class Note extends Component {
           <Card.Header style={{ backgroundColor: "#212121" }}>
               <Row>
                   <Col md={9} style={{ color: "#ffffff" }}>
-                      {this.props.name} - {this.props.date}
+                      {this.props.name} - {this.props.date} {this.props.user}
                   </Col>
-                  <Col md={1}>
-                      <Button href={"/note/" + this.props.id} variant="light" size="sm">Edit</Button>
-                  </Col>
-                  <Col md={1}>
-                      <Button variant="light" size="sm" onClick={this.onDeleteClick.bind(this,this.props.id)}>Delete</Button>
-                  </Col>
+                  {this.getButtons()}
               </Row>
           </Card.Header>
           <Card.Body>
@@ -112,7 +132,7 @@ class Note extends Component {
           </Card.Body>
           <Card.Footer>
           {this.props.tags.map(tag => (
-                    <Badge variant="secondary" style={{ marginRight: "10px" }}>
+                    <Badge key={tag} variant="secondary" style={{ marginRight: "10px" }}>
                         {tag}
                     </Badge>
             ))}

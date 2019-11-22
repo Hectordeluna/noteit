@@ -3,7 +3,9 @@ const {Schema} = mongoose;
 
 const commentSchema = new Schema({
     user: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
-    comment: String
+    username: String,
+    comment: String,
+    likes: Number
 })
 
 mongoose.model('comments', commentSchema);

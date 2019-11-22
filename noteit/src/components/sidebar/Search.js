@@ -44,7 +44,7 @@ class Search extends Component {
         <Row>
             {results.map(note => (
                 <Col key={note._id} md={12}>
-                    <Note name={note.name} date={note.date.toString().split('T')[0]} id={note._id} description={note.description} tags={note.tags} commentsDisable={true}/>
+                    <Note name={note.name} date={note.date.toString().split('T')[0]} id={note._id} description={note.description} tags={note.tags} commentsDisable={true} canEdit={note.canEdit}/>
                 </Col>
             ))}
         </Row>

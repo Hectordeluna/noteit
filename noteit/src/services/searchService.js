@@ -7,5 +7,23 @@ export default {
         search: Q,
     }});
     return res.data || [];
+  },
+  findUsers: async (Q) => {
+    let res = await axios.get('/api/search/users/', 
+    { params: {
+        search: Q,
+    }});
+    return res.data || [];
+  },
+  getRequests: async () => {
+    let res = await axios.get(`/api/users/requests`);
+    return res.data || [];
+  },
+  getFriensNotes: async (Q) => {
+    let res = await axios.get('/api/search/friends/notes/', 
+    { params: {
+        search: Q,
+    }});
+    return res.data || [];
   }
 }

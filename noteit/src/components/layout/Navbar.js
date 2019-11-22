@@ -6,6 +6,30 @@ import { FaUserAlt } from 'react-icons/fa';
 import { logoutUser } from "../../actions/authActions";
 
 class Navbar extends Component {
+
+  constructor(props) {
+    super(props);
+    const {user} = this.props.auth;
+    this.state = {
+      currentUser: user.username
+    }
+  }
+
+  profile () {
+    const {user} = this.props.auth;
+
+      return (
+        <Nav>
+        <NavDropdown drop="left" title={(<FaUserAlt/>)} id="dropdown">
+          <NavDropdown.Item>{this.state.currentUser}</NavDropdown.Item>
+          <NavDropdown.Divider />
+          <NavDropdown.Item onClick={this.props.logoutUser}>Log out</NavDropdown.Item>
+        </NavDropdown>
+        </Nav>
+      );
+    
+  }
+
   render() {
     return (
     <NavB bg="dark" variant="dark">
@@ -13,11 +37,7 @@ class Navbar extends Component {
         <Nav className="mr-auto">
           <Nav.Link href="/dashboard">Home</Nav.Link>
         </Nav>
-          <Nav>
-          <NavDropdown drop="left" title={(<FaUserAlt/>)} id="dropdown">
-            <NavDropdown.Item onClick={this.props.logoutUser}>Log out</NavDropdown.Item>
-          </NavDropdown>
-          </Nav>
+        {this.profile()}
     </NavB>
     );
   }

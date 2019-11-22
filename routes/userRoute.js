@@ -49,8 +49,7 @@ module.exports = (app) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
                         if (err) throw err;
                         newUser.password = hash;
-                        newUser
-                        .save()
+                        newUser.save()
                         .then(user => res.json(user))
                         .catch(err => console.log(err));
                     });
@@ -85,6 +84,7 @@ module.exports = (app) => {
             // Create JWT Payload
             const payload = {
                 id: user.id,
+                username: user.username,
                 name: user.name
             };
             
@@ -110,6 +110,91 @@ module.exports = (app) => {
             }
         });
         });
+    });
+
+
+    app.use('/api/users/', function(req, res, next) {
+      var token = req.get("Authorization");
+      if (!token) next({ auth: false, message: 'No token provided.' });
+      
+      jwt.verify(token, keys.secretOrKey, function(err, decoded) {
+        if (err) next(err);
+        
+        req.user = decoded;
+        next();
+      });
+    });
+
+    // list all friend requests form user
+    app.get('/api/users/requests', async (req, res) =>{
+      const userID = req.user.id;
+      User.findById({_id : userID}).populate('requests').then(user => {
+        return res.status(200).json(user.requests);
+      }).catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    //list user's friends
+    app.get('/api/users/friends', async (req, res) =>{
+      const userID = req.user.id;
+      User.findById({userID}).then(user => {
+        return res.status(200).json(user.friends);
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // send a friend request to another user
+    app.post('/api/users/send-request/:user2', async (req, res) => {
+      const userID = req.user.id;
+      const {user2} = req.params;
+      User.findById({_id: user2}).then(user => {
+        user.requests.push(userID);
+        user.save();
+        return res.status(200).json({success: true});
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // remove friend request from user
+    app.post('api/users/deny-request/:requestID', async (req, res) => {
+      const userID = req.user.id;
+      const {requestID} = req.params;
+      User.findById({userID}).then(user => {
+        user.requests = user.requests.filter(id => {id == requestID});
+        user.save();
+        return res.status(200).json({success: true});
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
+    });
+
+    // remove friend request and add to friends list
+    app.post('/api/users/accept-request/:requestID', async (req, res) => {
+      const userID = req.user.id;
+      const {requestID} = req.params;
+
+      User.findById({_id : requestID}).then(user2 =>{
+        user2.friends.push(userID);
+        user2.save();
+        User.findById({_id : userID}).then(user => {
+          user.friends.push(requestID);
+          user.requests = user.requests.filter(id => {id == requestID});
+          user.save();
+          return res.status(200).json({success: true});
+        })
+        .catch(function(err) {
+          return res.json(err);
+        });
+      })
+      .catch(function(err) {
+        return res.json(err);
+      });
     });
 
 }
