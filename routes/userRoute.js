@@ -112,6 +112,18 @@ module.exports = (app) => {
         });
     });
 
+    app.use('/api/users/', function(req, res, next) {
+      var token = req.get("Authorization");
+      if (!token) next({ auth: false, message: 'No token provided.' });
+      
+      jwt.verify(token, keys.secretOrKey, function(err, decoded) {
+        if (err) next(err);
+        
+        req.user = decoded;
+        next();
+      });
+    });
+
     // list all friend requests form user
     app.get('/api/users/requests', async (req, res) =>{
       const userID = req.user.id;
