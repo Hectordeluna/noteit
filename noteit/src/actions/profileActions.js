@@ -6,13 +6,13 @@ import {
 } from "./types";
 
 export const getUser = id => dispatch => {
-  dispatch(setUserLoading);
-  axios.get(`/api/users/${id}`).then (res => 
+  dispatch(setUserLoading());
+  axios.get(`/api/users/${id}`).then (res =>  
     dispatch ({
       type: GET_USER_PROFILE,
       payload: res.data
-    })
-  );
+      })
+    );
 }
 
 export const setUserLoading = user => {

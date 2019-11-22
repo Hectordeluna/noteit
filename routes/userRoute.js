@@ -116,7 +116,6 @@ module.exports = (app) => {
     app.get('/api/users/:userID', async (req, res) => {
       const {userID} = req.params;
       User.findById(userID).then(user => {
-        console.log(user);
         return res.status(200).json(user);
       }).catch(function(err) {
         return res.json(err);
@@ -126,7 +125,7 @@ module.exports = (app) => {
     // list all friend requests form user
     app.get('/api/users/requests', async (req, res) =>{
       const userID = req.user.id;
-      User.findById({userID}).then(user => {
+      User.findById(userID).then(user => {
         return res.status(200).json(user.requests);
       }).catch(function(err) {
         return res.json(err);
@@ -136,7 +135,7 @@ module.exports = (app) => {
     //list user's friends
     app.get('/api/users/friends', async (req, res) =>{
       const userID = req.user.id;
-      User.findById({userID}).then(user => {
+      User.findById(userID).then(user => {
         return res.status(200).json(user.friends);
       })
       .catch(function(err) {
@@ -148,7 +147,7 @@ module.exports = (app) => {
     app.post('/api/users/send-request/:user2', async (req, res) => {
       const userID = req.user.id;
       const {user2} = req.params;
-      User.findById({user2}).then(user => {
+      User.findById(user2).then(user => {
 
         user.requests.push(userID);
         user.save();
@@ -163,7 +162,7 @@ module.exports = (app) => {
     app.post('api/users/deny-request/:requestID', async (req, res) => {
       const userID = req.user.id;
       const {requestID} = req.params;
-      User.findById({userID}).then(user => {
+      User.findById(userID).then(user => {
         user.requests = user.requests.filter(id => {id == requestID});
         user.save();
         return res.status(200).json({success: true});
@@ -178,7 +177,7 @@ module.exports = (app) => {
       const userID = req.user.id;
       const {requestID} = req.params;
 
-      User.findById({requestID}).then(user2 =>{
+      User.findById(requestID).then(user2 =>{
         user2.friends.push(userID);
         user2.save();
       })
@@ -186,7 +185,7 @@ module.exports = (app) => {
         return res.json(err);
       });
 
-      User.findById({userID}).then(user => {
+      User.findById(userID).then(user => {
         user.friends.push(requestID);
         user.requests = user.requests.filter(id => {id == requestID});
         user.save();
