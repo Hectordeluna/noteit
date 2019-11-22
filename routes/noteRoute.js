@@ -24,11 +24,35 @@ module.exports = (app) => {
     User.findById(userID).
     populate(
       {path: 'notes', 
-      populate: {path: "comments"}
+      populate: {path: "comments", populate: "user"},
+      options: {sort: {date: -1}}
       }).exec((err, notes) => res.json(notes.notes));
-    // Note.find()
-    //   .then(notes => res.json(notes));
   });
+
+  app.use('/api/friends/', function(req, res, next) {
+    var token = req.get("Authorization");
+    if (!token) next({ auth: false, message: 'No token provided.' });
+    
+    jwt.verify(token, keys.secretOrKey, function(err, decoded) {
+      if (err) next(err);
+      
+      req.user = decoded;
+      next();
+    });
+  });
+
+
+  app.get(`/api/friends/notes`, (req, res) => {
+    const userID = req.user.id;
+
+    User.findById({_id : userID}).then(user => {
+      Note.find({ username : {$in : user.friends}, public : "true"}).populate([{ path: 'username', select: 'username' },{ path: 'comments', populate : {path: 'user', select: 'username' }}]).then(notes => {
+        return res.json(notes);
+      })
+    });
+
+  });
+
 
   app.get(`/api/note/:id`, (req, res) => {
     const {id} = req.params;
@@ -68,7 +92,7 @@ module.exports = (app) => {
   app.delete(`/api/note/:id`, async (req, res) => {
     const {id} = req.params;
     const userID = req.user.id;
-    Note.remove({ '_id' : id, 'username' : userID})
+    Note.deleteOne({ '_id' : id})
     .then((note) => {
       return res.status(202).json(id);
     }).catch(function(err) {

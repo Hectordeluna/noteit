@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getNotes } from "../../actions/noteActions";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Note from "./../note/Note"
+import NotesList from "./NotesList";
 
 class Mynotes extends Component {
 
@@ -13,25 +14,8 @@ class Mynotes extends Component {
 
   render() {
     const { notes } = this.props.note;
-
     return (
-      <Container>
-        <Row>
-          <Col md={10}>
-            <h1>My Notes</h1>
-          </Col>
-          <Col md={2}>
-              <Button href="/note" variant="dark" style={{ verticalAlign : "middle" }}>New Note</Button>
-          </Col>
-        </Row>
-        <Row style={{ borderTop : "1px solid #dedede" }}>
-            {notes.map(note => (
-                <Col key={note._id} md={12}>
-                    <Note name={note.name} date={note.date.split('T')[0]} id={note._id} description={note.description} commentsNote={note.comments}/>
-                </Col>
-            ))}
-        </Row>
-      </Container>
+     <NotesList notes={notes} title="My Notes"/>
     );
   }
 }

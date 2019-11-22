@@ -112,6 +112,18 @@ module.exports = (app) => {
         });
     });
 
+    app.use('/api/users/', function(req, res, next) {
+      var token = req.get("Authorization");
+      if (!token) next({ auth: false, message: 'No token provided.' });
+      
+      jwt.verify(token, keys.secretOrKey, function(err, decoded) {
+        if (err) next(err);
+        
+        req.user = decoded;
+        next();
+      });
+    });
+
     // get all user information
     app.get('/api/users/:userID', async (req, res) => {
       const {userID} = req.params;
@@ -126,7 +138,7 @@ module.exports = (app) => {
     // list all friend requests form user
     app.get('/api/users/requests', async (req, res) =>{
       const userID = req.user.id;
-      User.findById({userID}).then(user => {
+      User.findById({_id : userID}).populate('requests').then(user => {
         return res.status(200).json(user.requests);
       }).catch(function(err) {
         return res.json(err);
@@ -148,8 +160,7 @@ module.exports = (app) => {
     app.post('/api/users/send-request/:user2', async (req, res) => {
       const userID = req.user.id;
       const {user2} = req.params;
-      User.findById({user2}).then(user => {
-
+      User.findById({_id: user2}).then(user => {
         user.requests.push(userID);
         user.save();
         return res.status(200).json({success: true});
@@ -174,23 +185,22 @@ module.exports = (app) => {
     });
 
     // remove friend request and add to friends list
-    app.post('/api/users/accept-request/:requestID', async (res, req) => {
+    app.post('/api/users/accept-request/:requestID', async (req, res) => {
       const userID = req.user.id;
       const {requestID} = req.params;
 
-      User.findById({requestID}).then(user2 =>{
+      User.findById({_id : requestID}).then(user2 =>{
         user2.friends.push(userID);
         user2.save();
-      })
-      .catch(function(err) {
-        return res.json(err);
-      });
-
-      User.findById({userID}).then(user => {
-        user.friends.push(requestID);
-        user.requests = user.requests.filter(id => {id == requestID});
-        user.save();
-        return res.status(200).json({success: true});
+        User.findById({_id : userID}).then(user => {
+          user.friends.push(requestID);
+          user.requests = user.requests.filter(id => {id == requestID});
+          user.save();
+          return res.status(200).json({success: true});
+        })
+        .catch(function(err) {
+          return res.json(err);
+        });
       })
       .catch(function(err) {
         return res.json(err);
