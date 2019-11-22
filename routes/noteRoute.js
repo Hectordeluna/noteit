@@ -92,7 +92,7 @@ module.exports = (app) => {
   app.delete(`/api/note/:id`, async (req, res) => {
     const {id} = req.params;
     const userID = req.user.id;
-    Note.remove({ '_id' : id, 'username' : userID})
+    Note.deleteOne({ '_id' : id})
     .then((note) => {
       return res.status(202).json(id);
     }).catch(function(err) {
