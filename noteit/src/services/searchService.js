@@ -17,7 +17,10 @@ export default {
   },
   getRequests: async () => {
     let res = await axios.get(`/api/users/requests`);
-    return res.data || [];
+    if (typeof res.data === "undefined"){
+      return [];
+    }
+    return res.data;
   },
   getFriensNotes: async (Q) => {
     let res = await axios.get('/api/search/friends/notes/', 

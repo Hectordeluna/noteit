@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getUser } from "../../actions/profileActions";
 import { Container, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
+import Friends from "./friends";
 
 function dateToStr(date){
   if (date){
@@ -32,11 +33,12 @@ class Myprofile extends Component {
           <h2 style={{color: 'rgb(80,80,80)'}}>{user.username}</h2>
           </Col>
         </Row>
-          <Row style={{ borderTop : "1px solid #dedede", margin: '5px'}}> </Row>
-          <ListGroup>
-            <ListGroupItem>Email:  {user.email}</ListGroupItem>
-            <ListGroupItem>Joined: {dateToStr(user.date)}</ListGroupItem>
-          </ListGroup>
+        <Row style={{ borderTop : "1px solid #dedede", margin: '5px'}}> </Row>
+        <ListGroup>
+          <ListGroupItem>Email:  {user.email}</ListGroupItem>
+          <ListGroupItem>Joined: {dateToStr(user.date)}</ListGroupItem>
+        </ListGroup>
+        <h3 style={{color: 'rgb(80,80,80)'}}>Friends</h3>
       </Container>
     );
   }
