@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session')
 const passport = require("passport");
 
-require('./models/Note');
-require('./models/User');
-require('./models/Comment');
+require('./models/note');
+require('./models/user');
+require('./models/comment');
 
 const app = express();
 
