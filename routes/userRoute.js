@@ -112,6 +112,17 @@ module.exports = (app) => {
         });
     });
 
+    // get all user information
+    app.get('/api/users/:userID', async (req, res) => {
+      const {userID} = req.params;
+      User.findById(userID).then(user => {
+        console.log(user);
+        return res.status(200).json(user);
+      }).catch(function(err) {
+        return res.json(err);
+      });
+    });
+
     // list all friend requests form user
     app.get('/api/users/requests', async (req, res) =>{
       const userID = req.user.id;

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import Mynotes from "./../mynotes/Mynotes";
+import Myprofile from "./../myprofile/Myprofile";
 
 class Sidebar extends Component {
 
@@ -26,6 +27,9 @@ class Sidebar extends Component {
                         <Nav.Item>
                         <Nav.Link eventKey="second">Tab 2</Nav.Link>
                         </Nav.Item>
+                        <Nav.Item>
+                        <Nav.Link eventKey="third">My Profile</Nav.Link>
+                        </Nav.Item>
                     </Nav>
                 </Col>
                 <Col>
@@ -35,6 +39,9 @@ class Sidebar extends Component {
                         </Tab.Pane>
                         <Tab.Pane eventKey="second">
                             Hola
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="third">
+                            <Myprofile />
                         </Tab.Pane>
                     </Tab.Content>
                 </Col>
